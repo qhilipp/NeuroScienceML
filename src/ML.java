@@ -1,25 +1,31 @@
 import java.util.ArrayList;
 
 public class ML {
-
-	public static final int RESOLUTION = 100;
 	
-	// TODO: Hier eine passende Kernel Function auswählen
+	public static double m = 0, b = 0.3;
+	
+	// Optional: Also use a parameterized kernel function
+	// public static double k = 0;
+	
+	// TODO: Find a suitable kernel function
 	public static double kernel(double x, double y) {
-		return new Point(x, y, 0).dist(0.4, -0.5);
+		return Math.pow(new Point(x, y, 0).dist(0, 0), 2);
 	}
 	
-	// TODO: Hier die Hyperplane Function auswählen
-	public static double f(double x, double y) {
-		double m = 1;
-		double b = 0;
-//		return m * x + m * y + b;
-		return 0.3;
+	// TODO: Find the hyperparameters
+	public static void findHyperparameters(ArrayList<DataPoint> data) {
+		
 	}
 	
-	// TODO: Hier den Cross Validation Algorithmus implementieren
+	// TODO: Implement the Cross Validation algorithm
 	public static double crossValidate(int n, ArrayList<DataPoint> data) {
 		return 0;
 	}
+	
+	// Configuration for the visuals
+	public static final int RESOLUTION = 100;
+	public static final boolean TOOLTIP_INFO = true;
+	public static final boolean SHOW_DATA = true;
+	public static final boolean SHOW_SVN = false;
 	
 }
