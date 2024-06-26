@@ -12,7 +12,7 @@ public class ML {
 		return Math.pow(new Point(x, y, 0).dist(0, 0), 2);
 	}
 	
-	// TODO: Find the hyperparameters
+	// TODO: Find the hyperparameters, you might want to enable SHOW_SVN for this
 	public static void findHyperparameters(ArrayList<DataPoint> data) {
 		
 	}
