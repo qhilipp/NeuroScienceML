@@ -16,6 +16,7 @@ public class Frame extends JFrame implements MouseMotionListener {
 	}
 	
 	public Frame() {
+		ML.findHyperparameters(data);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setSize(700, 700);
 		setLocationRelativeTo(null);
@@ -29,20 +30,24 @@ public class Frame extends JFrame implements MouseMotionListener {
 	@Override
 	public void paint(Graphics g) {		
 		Color hit = Color.GREEN.darker().darker().darker().darker();
-		Color nonHit = Color.ORANGE.darker().darker().darker().darker();
+		Color nonHit = Color.RED.darker().darker().darker().darker();
 		
-		for(double i = 0; i < ML.RESOLUTION; i++) {
-			for(double j = 0; j < ML.RESOLUTION; j++) {
-				double x = (i / ML.RESOLUTION - 0.5) * 2 - ML.RESOLUTION / getWidth() / 2;
-				double y = (j / ML.RESOLUTION - 0.5) * 2 - ML.RESOLUTION / getHeight() / 2;
-				g.setColor(ML.kernel(x, y) < ML.f(x, y) ? hit : nonHit);
-				g.fillRect((int) i * getWidth() / ML.RESOLUTION, (int) j * getHeight() / ML.RESOLUTION, getWidth() / ML.RESOLUTION, getHeight() / ML.RESOLUTION);
+		if(ML.SHOW_SVN) {
+			for(double i = 0; i < ML.RESOLUTION; i++) {
+				for(double j = 0; j < ML.RESOLUTION; j++) {
+					double x = (i / ML.RESOLUTION - 0.5) * 2 - ML.RESOLUTION / getWidth() / 2;
+					double y = (j / ML.RESOLUTION - 0.5) * 2 - ML.RESOLUTION / getHeight() / 2;
+					g.setColor(ML.kernel(x, y) < f(x, y) ? hit : nonHit);
+					g.fillRect((int) i * getWidth() / ML.RESOLUTION, (int) j * getHeight() / ML.RESOLUTION, getWidth() / ML.RESOLUTION, getHeight() / ML.RESOLUTION);
+				}
 			}
 		}
 		
-		for(DataPoint point : data) {
-			g.setColor(point.hasTrait ? Color.GREEN : Color.ORANGE);
-			g.fillOval((int) (getWidth() * (point.cords.x + 1) / 2) - 2, (int) (getHeight() * (point.cords.y + 1) / 2) - 2, 4, 4);
+		if(ML.SHOW_DATA) {
+			for(DataPoint point : data) {
+				g.setColor(point.hasTrait ? Color.GREEN : Color.RED);
+				g.fillOval((int) (getWidth() * (point.cords.x + 1) / 2) - 2, (int) (getHeight() * (point.cords.y + 1) / 2) - 2, 4, 4);
+			}
 		}
 		g.setColor(Color.GRAY);
 		g.drawLine(getWidth() / 2, 0, getWidth() / 2, getHeight());
@@ -50,14 +55,15 @@ public class Frame extends JFrame implements MouseMotionListener {
 	}
 	
 	private void populate() {
-		points.add(new Point(0, 0, 0));
+		points.add(new Point(0.2, 0, 0));
 		
 		for(int i = 0; i < 1000; i++) {
 			DataPoint point = new DataPoint();
 			point.cords = Point.random();
 			
 			for(Point p : points) {
-				if(point.cords.dist(p.x, p.y) < 0.3) {
+				double y = point.cords.y * (point.cords.y > 0 ? 1 : 0.5);
+				if(p.dist(point.cords.x, y) < 0.4) {
 					point.hasTrait = true;
 					break;
 				}
@@ -65,14 +71,19 @@ public class Frame extends JFrame implements MouseMotionListener {
 			data.add(point);
 		}
 	}
+	
+	private double f(double x, double y) {
+		return ML.m * x + ML.m * y + ML.b;
+	}
 
 	@Override
 	public void mouseDragged(MouseEvent e) {}
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
+		if(!ML.TOOLTIP_INFO) return;
 		double x = ((e.getX() + ML.RESOLUTION / 2.0) / getWidth() - 0.5) * 2;
 		double y = ((e.getY() + ML.RESOLUTION / 2.0) / getHeight() - 0.5) * 2;
-		System.out.println(" (" + x + ", " + y + ") | f: " + ML.f(x, y) + ", Kernel: " + ML.kernel(x, y));
+		System.out.println(" (" + x + ", " + y + ") | f: " + f(x, y) + ", Kernel: " + ML.kernel(x, y));
 	}
 }
