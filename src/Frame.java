@@ -55,6 +55,12 @@ public class Frame extends JFrame implements MouseMotionListener, KeyListener {
 		g.drawLine(0, getHeight() / 2, getWidth(), getHeight() / 2);
 		
 		if(ML.SHOW_DATA) {
+			if(ML.HIGHLIGHT_TEST_DATA) {
+				for(DataPoint point : getTestData(block)) {
+					g.setColor(Color.GRAY);
+					g.fillOval((int) (getWidth() * (point.cords.x + 1) / 2) - 4, (int) (getHeight() * (point.cords.y + 1) / 2) - 4, 8, 8);
+				}
+			}
 			for(DataPoint point : data) {
 				g.setColor(point.hasTrait ? Color.GREEN : Color.RED);
 				g.fillOval((int) (getWidth() * (point.cords.x + 1) / 2) - 2, (int) (getHeight() * (point.cords.y + 1) / 2) - 2, 4, 4);
@@ -66,21 +72,24 @@ public class Frame extends JFrame implements MouseMotionListener, KeyListener {
 	}
 	
 	private void printStats() {
-		long startTime = System.currentTimeMillis();
-		ML.findHyperparameters(data);
-		long duration = System.currentTimeMillis() - startTime;
 		System.out.println("<==============================>");
-		System.out.println("Avg. Cross Validation: " + getAvgCrossValidation());
-		System.out.println("Duration: " + duration + "ms");
-		System.out.println("<==============================>");
+		double sum = 0;
+		for(int i = 0; i < ML.BLOCKS; i++) sum += printStats(i);
+		System.out.println("Avg Cross Validation: " + sum / ML.BLOCKS);
+		System.out.println("<==============================>\n");
 	}
 	
-	private double getAvgCrossValidation() {
-		double sum = 0;
-		for(int i = 0; i < ML.BLOCKS; i++) {
-			sum += ML.crossValidate(getTrainingData(i), getTestData(i));
-		}
-		return sum / ML.BLOCKS;
+	private double printStats(int i) {
+		long startTime = System.currentTimeMillis();
+		ML.findHyperparameters(getTrainingData(i));
+		long duration = System.currentTimeMillis() - startTime;
+		double validation = ML.crossValidate(getTrainingData(i), getTestData(i));
+		
+		System.out.println("Cross Validation (" + i + "): " + validation);
+		System.out.println("Duration: " + duration + "ms");
+		System.out.println("-------------");
+		
+		return validation;
 	}
 	
 	private void populate() {
@@ -106,7 +115,7 @@ public class Frame extends JFrame implements MouseMotionListener, KeyListener {
 		for(int i = data.size() / ML.BLOCKS * block; i < data.size() / ML.BLOCKS * (block + 1); i++) {
 			testData.add(data.get(i));
 		}
-		return data;
+		return testData;
 	}
 	
 	private ArrayList<DataPoint> getTrainingData(int block) {
@@ -140,7 +149,7 @@ public class Frame extends JFrame implements MouseMotionListener, KeyListener {
 		else return;
 		invalidate();
 		repaint();
-		System.out.println("Cross Validation (" + block + "): " + ML.crossValidate(getTrainingData(block), getTestData(block)));
+		printStats(block);
 	}
 
 	@Override

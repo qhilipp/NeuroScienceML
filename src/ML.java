@@ -28,5 +28,6 @@ public class ML {
 	public static final boolean TOOLTIP_INFO = false;
 	public static final boolean SHOW_DATA = true;
 	public static final boolean SHOW_SVN = false;
+	public static final boolean HIGHLIGHT_TEST_DATA = false;
 	
 }
