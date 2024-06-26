@@ -3,6 +3,7 @@ import java.util.ArrayList;
 public class ML {
 	
 	public static double m = 0, b = 0.3;
+	public static final int BLOCKS = 5; 
 	
 	// Optional: Also use a parameterized kernel function
 	// public static double k = 0;
@@ -24,7 +25,7 @@ public class ML {
 	
 	// Configuration for the visuals
 	public static final int RESOLUTION = 100;
-	public static final boolean TOOLTIP_INFO = true;
+	public static final boolean TOOLTIP_INFO = false;
 	public static final boolean SHOW_DATA = true;
 	public static final boolean SHOW_SVN = false;
 	

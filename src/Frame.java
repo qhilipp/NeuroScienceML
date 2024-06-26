@@ -1,15 +1,18 @@
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
 
-public class Frame extends JFrame implements MouseMotionListener {
+public class Frame extends JFrame implements MouseMotionListener, KeyListener {
 
 	private ArrayList<DataPoint> data = new ArrayList<>();
 	private ArrayList<Point> points = new ArrayList<>();
+	private int block = 0;
 	
 	public static void main(String[] args) {
 		new Frame();
@@ -25,6 +28,7 @@ public class Frame extends JFrame implements MouseMotionListener {
 		populate();
 		setVisible(true);
 		addMouseMotionListener(this);
+		addKeyListener(this);
 	}
 	
 	@Override
@@ -56,6 +60,9 @@ public class Frame extends JFrame implements MouseMotionListener {
 				g.fillOval((int) (getWidth() * (point.cords.x + 1) / 2) - 2, (int) (getHeight() * (point.cords.y + 1) / 2) - 2, 4, 4);
 			}
 		}
+		
+		g.setColor(Color.GRAY);
+		g.drawString("Block: " + block, 5, 25);
 	}
 	
 	private void populate() {
@@ -90,4 +97,18 @@ public class Frame extends JFrame implements MouseMotionListener {
 		double y = ((e.getY() + ML.RESOLUTION / 2.0) / getHeight() - 0.5) * 2;
 		System.out.println(" (" + x + ", " + y + ") | f: " + f(x, y) + ", Kernel: " + ML.kernel(x, y));
 	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		if(e.getKeyCode() == KeyEvent.VK_UP) block = (block + 1) % ML.BLOCKS;
+		if(e.getKeyCode() == KeyEvent.VK_DOWN) block = (block - 1 + ML.BLOCKS) % ML.BLOCKS;
+		invalidate();
+		repaint();
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {}
 }
