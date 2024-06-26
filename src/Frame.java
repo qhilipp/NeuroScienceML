@@ -28,7 +28,7 @@ public class Frame extends JFrame implements MouseMotionListener {
 	}
 	
 	@Override
-	public void paint(Graphics g) {		
+	public void paint(Graphics g) {
 		Color hit = Color.GREEN.darker().darker().darker().darker();
 		Color nonHit = Color.RED.darker().darker().darker().darker();
 		
@@ -41,7 +41,14 @@ public class Frame extends JFrame implements MouseMotionListener {
 					g.fillRect((int) i * getWidth() / ML.RESOLUTION, (int) j * getHeight() / ML.RESOLUTION, getWidth() / ML.RESOLUTION, getHeight() / ML.RESOLUTION);
 				}
 			}
+		} else {
+			g.setColor(Color.BLACK);
+			g.fillRect(0, 0, getWidth(), getHeight());
 		}
+		
+		g.setColor(Color.GRAY);
+		g.drawLine(getWidth() / 2, 0, getWidth() / 2, getHeight());
+		g.drawLine(0, getHeight() / 2, getWidth(), getHeight() / 2);
 		
 		if(ML.SHOW_DATA) {
 			for(DataPoint point : data) {
@@ -49,9 +56,6 @@ public class Frame extends JFrame implements MouseMotionListener {
 				g.fillOval((int) (getWidth() * (point.cords.x + 1) / 2) - 2, (int) (getHeight() * (point.cords.y + 1) / 2) - 2, 4, 4);
 			}
 		}
-		g.setColor(Color.GRAY);
-		g.drawLine(getWidth() / 2, 0, getWidth() / 2, getHeight());
-		g.drawLine(0, getHeight() / 2, getWidth(), getHeight() / 2);
 	}
 	
 	private void populate() {
