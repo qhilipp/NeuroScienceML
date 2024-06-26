@@ -21,7 +21,7 @@ public class Frame extends JFrame implements MouseMotionListener, KeyListener {
 	public Frame() {
 		printStats();
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		setSize(700, 700);
+		setSize(ML.SIZE, ML.SIZE);
 		setLocationRelativeTo(null);
 		setResizable(false);
 		setUndecorated(true);

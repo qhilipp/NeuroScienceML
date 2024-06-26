@@ -2,7 +2,7 @@ import java.util.ArrayList;
 
 public class ML {
 	
-	public static double m = 0, b = 0.3;
+	public static double m = 0, b = 1;
 	public static final int BLOCKS = 5; 
 	
 	// Optional: Also use a parameterized kernel function
@@ -24,12 +24,13 @@ public class ML {
 	}
 	
 	// Configuration for the visuals
+	public static final int SIZE = 700;
 	public static final int RESOLUTION = 100;
 	public static final boolean TOOLTIP_INFO = false;
 	public static final boolean SHOW_DATA = true;
-	public static final boolean SHOW_SVN = false;
-	public static final boolean HIGHLIGHT_TEST_DATA = false;
-	public static final double POINT_SCALE = 0.0;
+	public static final boolean SHOW_SVN = true;
+	public static final boolean HIGHLIGHT_TEST_DATA = true;
+	public static final double POINT_SCALE = 4.0;
 	public static final boolean MONOTONE = false;
 	
 }
