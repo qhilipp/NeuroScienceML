@@ -57,18 +57,25 @@ public class Frame extends JFrame implements MouseMotionListener, KeyListener {
 		if(ML.SHOW_DATA) {
 			if(ML.HIGHLIGHT_TEST_DATA) {
 				for(DataPoint point : getTestData(block)) {
-					g.setColor(Color.GRAY);
+					if(!ML.MONOTONE) g.setColor(Color.GRAY);
+					drawPoint(g, point, true);
 					g.fillOval((int) (getWidth() * (point.cords.x + 1) / 2) - 4, (int) (getHeight() * (point.cords.y + 1) / 2) - 4, 8, 8);
 				}
 			}
 			for(DataPoint point : data) {
-				g.setColor(point.hasTrait ? Color.GREEN : Color.RED);
-				g.fillOval((int) (getWidth() * (point.cords.x + 1) / 2) - 2, (int) (getHeight() * (point.cords.y + 1) / 2) - 2, 4, 4);
+				if(!ML.MONOTONE) g.setColor(point.hasTrait ? Color.GREEN : Color.RED);
+				drawPoint(g, point, false);
 			}
 		}
 		
 		g.setColor(Color.GRAY);
 		g.drawString("Block: " + block, 5, 25);
+	}
+	
+	private void drawPoint(Graphics g, DataPoint p, boolean outline) {
+		int s = (int) (ML.kernel(p.cords.x, p.cords.y) * ML.POINT_SCALE) + (outline ? 7 : 3);
+		System.out.println(s);
+		g.fillOval((int) ((getWidth() * (p.cords.x + 1) - s) / 2), (int) ((getHeight() * (p.cords.y + 1) - s) / 2), s, s);
 	}
 	
 	private void printStats() {

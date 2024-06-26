@@ -10,7 +10,7 @@ public class ML {
 	
 	// TODO: Find a suitable kernel function
 	public static double kernel(double x, double y) {
-		return Math.pow(new Point(x, y, 0).dist(0, 0), 2);
+		return 2 - Math.pow(new Point(x, y, 0).dist(0, 0), 2);
 	}
 	
 	// TODO: Find the hyperparameters, you might want to enable SHOW_SVN for this
@@ -29,5 +29,7 @@ public class ML {
 	public static final boolean SHOW_DATA = true;
 	public static final boolean SHOW_SVN = false;
 	public static final boolean HIGHLIGHT_TEST_DATA = false;
+	public static final double POINT_SCALE = 0.0;
+	public static final boolean MONOTONE = false;
 	
 }
