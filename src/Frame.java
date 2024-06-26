@@ -19,7 +19,7 @@ public class Frame extends JFrame implements MouseMotionListener, KeyListener {
 	}
 	
 	public Frame() {
-		ML.findHyperparameters(data);
+		printStats();
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setSize(700, 700);
 		setLocationRelativeTo(null);
@@ -65,6 +65,24 @@ public class Frame extends JFrame implements MouseMotionListener, KeyListener {
 		g.drawString("Block: " + block, 5, 25);
 	}
 	
+	private void printStats() {
+		long startTime = System.currentTimeMillis();
+		ML.findHyperparameters(data);
+		long duration = System.currentTimeMillis() - startTime;
+		System.out.println("<==============================>");
+		System.out.println("Avg. Cross Validation: " + getAvgCrossValidation());
+		System.out.println("Duration: " + duration + "ms");
+		System.out.println("<==============================>");
+	}
+	
+	private double getAvgCrossValidation() {
+		double sum = 0;
+		for(int i = 0; i < ML.BLOCKS; i++) {
+			sum += ML.crossValidate(getTrainingData(i), getTestData(i));
+		}
+		return sum / ML.BLOCKS;
+	}
+	
 	private void populate() {
 		points.add(new Point(0.2, 0, 0));
 		
@@ -81,6 +99,20 @@ public class Frame extends JFrame implements MouseMotionListener, KeyListener {
 			}
 			data.add(point);
 		}
+	}
+	
+	private ArrayList<DataPoint> getTestData(int block) {
+		ArrayList<DataPoint> testData = new ArrayList<>();
+		for(int i = data.size() / ML.BLOCKS * block; i < data.size() / ML.BLOCKS * (block + 1); i++) {
+			testData.add(data.get(i));
+		}
+		return data;
+	}
+	
+	private ArrayList<DataPoint> getTrainingData(int block) {
+		ArrayList<DataPoint> trainingData = new ArrayList<>(data);
+		for(DataPoint testPoint : getTestData(block)) trainingData.remove(testPoint);
+		return trainingData;
 	}
 	
 	private double f(double x, double y) {
@@ -104,9 +136,11 @@ public class Frame extends JFrame implements MouseMotionListener, KeyListener {
 	@Override
 	public void keyPressed(KeyEvent e) {
 		if(e.getKeyCode() == KeyEvent.VK_UP) block = (block + 1) % ML.BLOCKS;
-		if(e.getKeyCode() == KeyEvent.VK_DOWN) block = (block - 1 + ML.BLOCKS) % ML.BLOCKS;
+		else if(e.getKeyCode() == KeyEvent.VK_DOWN) block = (block - 1 + ML.BLOCKS) % ML.BLOCKS;
+		else return;
 		invalidate();
 		repaint();
+		System.out.println("Cross Validation (" + block + "): " + ML.crossValidate(getTrainingData(block), getTestData(block)));
 	}
 
 	@Override

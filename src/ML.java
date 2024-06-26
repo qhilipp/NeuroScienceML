@@ -19,7 +19,7 @@ public class ML {
 	}
 	
 	// TODO: Implement the Cross Validation algorithm
-	public static double crossValidate(int n, ArrayList<DataPoint> data) {
+	public static double crossValidate(ArrayList<DataPoint> trainingData, ArrayList<DataPoint> testData) {
 		return 0;
 	}
 	
