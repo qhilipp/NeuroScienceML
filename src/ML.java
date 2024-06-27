@@ -8,6 +8,16 @@ public class ML {
 	// Optional: Also use a parameterized kernel function
 	// public static double k = 0;
 	
+	// TODO: Implement the decision function for the SVN algorithm
+	public static boolean hasTrait(double x, double y) {
+		return false;
+	}
+	
+	// TODO: Implement the hyperplane function
+	public static double hyperPlane(double x, double y, double z) {
+		return 0;
+	}
+	
 	// TODO: Find a suitable kernel function
 	public static double kernel(double x, double y) {
 		return 2 - Math.pow(new Point(x, y, 0).dist(0, 0), 2);
@@ -29,8 +39,8 @@ public class ML {
 	public static final boolean TOOLTIP_INFO = false;
 	public static final boolean SHOW_DATA = true;
 	public static final boolean SHOW_SVN = true;
-	public static final boolean HIGHLIGHT_TEST_DATA = true;
-	public static final double POINT_SCALE = 4.0;
+	public static final boolean HIGHLIGHT_TEST_DATA = false;
+	public static final double POINT_SCALE = 0.0;
 	public static final boolean MONOTONE = false;
 	
 }

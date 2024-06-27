@@ -41,7 +41,7 @@ public class Frame extends JFrame implements MouseMotionListener, KeyListener {
 				for(double j = 0; j < ML.RESOLUTION; j++) {
 					double x = (i / ML.RESOLUTION - 0.5) * 2 - ML.RESOLUTION / getWidth() / 2;
 					double y = (j / ML.RESOLUTION - 0.5) * 2 - ML.RESOLUTION / getHeight() / 2;
-					g.setColor(ML.kernel(x, y) < f(x, y) ? hit : nonHit);
+					g.setColor(ML.hasTrait(x, y) ? hit : nonHit);
 					g.fillRect((int) i * getWidth() / ML.RESOLUTION, (int) j * getHeight() / ML.RESOLUTION, getWidth() / ML.RESOLUTION, getHeight() / ML.RESOLUTION);
 				}
 			}
@@ -74,7 +74,6 @@ public class Frame extends JFrame implements MouseMotionListener, KeyListener {
 	
 	private void drawPoint(Graphics g, DataPoint p, boolean outline) {
 		int s = (int) (ML.kernel(p.cords.x, p.cords.y) * ML.POINT_SCALE) + (outline ? 7 : 3);
-		System.out.println(s);
 		g.fillOval((int) ((getWidth() * (p.cords.x + 1) - s) / 2), (int) ((getHeight() * (p.cords.y + 1) - s) / 2), s, s);
 	}
 	
@@ -130,10 +129,6 @@ public class Frame extends JFrame implements MouseMotionListener, KeyListener {
 		for(DataPoint testPoint : getTestData(block)) trainingData.remove(testPoint);
 		return trainingData;
 	}
-	
-	private double f(double x, double y) {
-		return ML.m * x + ML.m * y + ML.b;
-	}
 
 	@Override
 	public void mouseDragged(MouseEvent e) {}
@@ -143,7 +138,7 @@ public class Frame extends JFrame implements MouseMotionListener, KeyListener {
 		if(!ML.TOOLTIP_INFO) return;
 		double x = ((e.getX() + ML.RESOLUTION / 2.0) / getWidth() - 0.5) * 2;
 		double y = ((e.getY() + ML.RESOLUTION / 2.0) / getHeight() - 0.5) * 2;
-		System.out.println(" (" + x + ", " + y + ") | f: " + f(x, y) + ", Kernel: " + ML.kernel(x, y));
+		System.out.println(" (" + x + ", " + y + ") | hp: " + ML.hyperPlane(x, y, ML.kernel(x, y)) + ", Kernel: " + ML.kernel(x, y));
 	}
 
 	@Override
